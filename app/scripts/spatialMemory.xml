@@ -1,0 +1,91 @@
+<application>
+    <name> Spatial Memory </name>
+
+    <authors>
+        <author email="giulia.belgiovine@iit.it"> Giulia Belgiovine, Jonas Gonzalez </author>
+    </authors>
+
+    <!-- ======== MODULES ======== -->
+
+    <module>
+        <name>spatialMemory</name>
+        <parameters> </parameters>
+        <node>localhost</node>
+    </module>
+
+    <module>
+        <name>objectRecognition</name>
+        <parameters> --task face_detection </parameters>
+        <node>localhost</node>
+    </module>
+
+    <!-- ======== VISUALIZATION ======== -->
+
+        <module>
+        <name>yarpview</name>
+        <parameters>--name /trackerView --compact</parameters>
+        <node>localhost</node>
+    </module>
+
+    <module>
+        <name>yarpview</name>
+        <parameters>--name /spatialMemoryView --compact</parameters>
+        <node>localhost</node>
+    </module>
+
+
+    <!-- ======== CONNECTIONS ======== -->
+
+    <connection>
+        <from>/icub/cam/left</from>
+        <to>/spatialMemory/image:i</to>
+        <protocol>mcast</protocol>
+    </connection>
+
+
+    <connection>
+        <from>/objectRecognition/objects:o</from>
+        <to>/spatialMemory/face:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+
+    <connection>
+        <from>/spatialMemory/image:o</from>
+        <to>/trackerView</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+
+    <connection>
+        <from>/spatialMemory/memory_image:o</from>
+        <to>/spatialMemoryView</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+
+    <connection persist="true">
+        <from>/iKinGazeCtrl/angles:o</from>
+        <to> /spatialMemory/icubHeadPose:i </to>
+        <protocol> tcp </protocol>
+    </connection>
+
+
+    <connection persist="true">
+        <from>/iKinGazeCtrl/events:o</from>
+        <to>/spatialMemory/iKinGazeCtrlEvents:i</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+       <connection persist="true">
+        <from>/spatialMemory/iKinGaze:rpc</from>
+        <to>/iKinGazeCtrl/rpc</to>
+        <protocol>tcp</protocol>
+    </connection>
+
+
+    <!-- ======== put connections of OPC ======== -->
+
+
+
+</application>
